@@ -14,7 +14,7 @@ resource "docker_container" "pyload" {
 
   labels {
     label = "traefik.http.routers.pyload.rule"
-    value = "Host(`pyload.fanya.dev`)"
+    value = "Host(`pyload.ando.arda`)"
   }
 
   labels {

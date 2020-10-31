@@ -16,7 +16,7 @@ resource "docker_network" "traefik_net" {
 }
 
 data "docker_registry_image" "traefik" {
-  name = "traefik:v2.2"
+  name = "traefik:v2.3"
 }
 
 resource "docker_image" "traefik" {

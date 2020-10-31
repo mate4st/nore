@@ -1,5 +1,5 @@
 data "docker_registry_image" "minio" {
-  name = "minio/minio:RELEASE.2020-09-23T19-18-30Z-arm64"
+  name = "minio/minio:RELEASE.2020-10-27T04-03-55Z-arm64"
 }
 
 resource "docker_image" "minio" {
@@ -14,7 +14,7 @@ resource "docker_container" "minio" {
 
   labels {
     label = "traefik.http.routers.minio.rule"
-    value = "Host(`minio.fanya.dev`)"
+    value = "Host(`minio.ando.arda`)"
   }
 
   labels {
@@ -52,8 +52,8 @@ resource "docker_container" "minio" {
   env = [
     "MINIO_ACCESS_KEY=admin",
     "MINIO_SECRET_KEY=${var.minio_secret_key}",
-    "MINIO_DOMAIN=minio.fanya.dev",
-    "MINIO_DISK_USAGE_CRAWL_ENABLE=off"
+    "MINIO_DISK_USAGE_CRAWL_ENABLE=off",
+    "MINIO_DOMAIN=minio.ando.arda"
   ]
 
   command = [
@@ -61,6 +61,7 @@ resource "docker_container" "minio" {
     "/data"
   ]
 
+  entrypoint = []
   networks_advanced {
     name = var.traefik_network
   }
