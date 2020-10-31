@@ -30,10 +30,6 @@ resource "docker_container" "traefik" {
 
   image = docker_image.traefik.latest
 
-  depends_on = [
-    docker_container.docker-socket-proxy
-  ]
-
   # acme (Let's encrypt) configuration file
   # needs 600 permission
   mounts {
@@ -67,6 +63,14 @@ resource "docker_container" "traefik" {
     read_only = false
   }
 
+  # Docker socket
+  mounts {
+    target = "/var/run/docker.sock"
+    source = "/var/run/docker.sock"
+    type = "bind"
+    read_only = true
+  }
+
   # HTTP
   ports {
     internal = "80"
@@ -82,82 +86,18 @@ resource "docker_container" "traefik" {
   }
 
   # socket.io
-//  ports {
-//    internal = "1337"
-//    external = "1337"
-//    protocol = "tcp"
-//  }
+  //  ports {
+  //    internal = "1337"
+  //    external = "1337"
+  //    protocol = "tcp"
+  //  }
 
   networks_advanced {
     name = docker_network.traefik_net.name
     //    ipv6_address = "2a01:4f8:221:3e41::2:a2"
   }
 
-  networks_advanced {
-    name = docker_network.docker_socket_net.name
-  }
-
   restart = "unless-stopped"
   must_run = true
-
-}
-
-resource "docker_image" "docker-socket-proxy" {
-  name = "tecnativa/docker-socket-proxy"
-}
-
-resource "docker_network" "docker_socket_net" {
-  name = "docker_socket_net"
-  driver = "bridge"
-  internal = true
-}
-
-resource "docker_container" "docker-socket-proxy" {
-  image = docker_image.docker-socket-proxy.latest
-  name = "docker-socket-proxy"
-  privileged = true
-  restart = "unless-stopped"
-
-  # Configure permissions
-  env = [
-    "EVENTS=1",
-    "PING=1",
-    "VERSION=1",
-
-    "CONTAINERS=1",
-
-    "AUTH=0",
-    "SECRETS=0",
-    "POST=0",
-
-    "BUILD=0",
-    "COMMIT=0",
-    "CONFIGS=0",
-    "DISTRIBUTION=0",
-    "EXEC=0",
-    "IMAGES=0",
-    "INFO=0",
-    "NETWORKS=0",
-    "NODES=0",
-    "PLUGINS=0",
-    "SERVICES=0",
-    "SESSION=0",
-    "SWARM=0",
-    "SYSTEM=0",
-    "TASKS=0",
-    "VOLUMES=0",
-  ]
-
-  # Docker socket
-  mounts {
-    target = "/var/run/docker.sock"
-    source = "/var/run/docker.sock"
-    type = "bind"
-    read_only = true
-  }
-
-  networks_advanced {
-    name = docker_network.docker_socket_net.name
-  }
 
 }
