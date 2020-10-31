@@ -28,6 +28,11 @@ module "traefik" {
   source = "./modules/traefik"
 }
 
+module "vault" {
+  source = "./modules/vault"
+  traefik_network = module.traefik.traefik_net
+}
+
 module "pyload" {
   source = "./modules/pyload"
   traefik_network = module.traefik.traefik_net
