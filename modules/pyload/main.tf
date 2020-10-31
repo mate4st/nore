@@ -44,7 +44,7 @@ resource "docker_container" "pyload" {
 
   mounts {
     target = "/downloads"
-    source = "/mnt/s1/pyload_data"
+    source = "/mnt/p1/pyload"
     type = "bind"
     read_only = false
   }

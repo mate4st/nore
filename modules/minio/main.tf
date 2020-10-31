@@ -1,5 +1,5 @@
 data "docker_registry_image" "minio" {
-  name = "minio/minio"
+  name = "minio/minio:RELEASE.2020-09-23T19-18-30Z-arm64"
 }
 
 resource "docker_image" "minio" {
@@ -44,7 +44,7 @@ resource "docker_container" "minio" {
 
   mounts {
     target = "/data"
-    source = "/mnt/s1/minio"
+    source = "/mnt/p1/minio"
     type = "bind"
     read_only = false
   }
@@ -52,7 +52,8 @@ resource "docker_container" "minio" {
   env = [
     "MINIO_ACCESS_KEY=admin",
     "MINIO_SECRET_KEY=${var.minio_secret_key}",
-    "MINIO_DOMAIN=minio.fanya.dev"
+    "MINIO_DOMAIN=minio.fanya.dev",
+    "MINIO_DISK_USAGE_CRAWL_ENABLE=off"
   ]
 
   command = [
@@ -60,7 +61,6 @@ resource "docker_container" "minio" {
     "/data"
   ]
 
-  entrypoint = []
   networks_advanced {
     name = var.traefik_network
   }
