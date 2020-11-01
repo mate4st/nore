@@ -15,3 +15,31 @@ region=eu-central-1
 aws_access_key_id=
 aws_secret_access_key=
 ````
+
+
+#### Minio
+
+`mc admin user add minio ACCESS_KEY_ID SECRET_ACCESS_KEY`
+
+`mc admin group add minio name user`
+
+`mc admin policy add minio plolicy_name policy.json`
+
+`mc admin policy set minio policy_name group=somegroup`
+
+**Example policy:**
+
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:*"
+          ],
+          "Resource": [
+            "arn:aws:s3:::bucket/*"
+          ]
+        }
+      ]
+    }
