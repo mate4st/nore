@@ -16,7 +16,7 @@ resource "docker_network" "traefik_net" {
 }
 
 data "docker_registry_image" "traefik" {
-  name = "traefik:v2.3"
+  name = "traefik:v2.2"
 }
 
 resource "docker_image" "traefik" {
@@ -30,27 +30,10 @@ resource "docker_container" "traefik" {
 
   image = docker_image.traefik.latest
 
-  # acme (Let's encrypt) configuration file
-  # needs 600 permission
+  # Traefik configuration
   mounts {
-    target = "/acme.json"
-    source = "/opt/services/traefik/acme.json"
-    type = "bind"
-    read_only = false
-  }
-
-  # Traefik configuration file
-  mounts {
-    target = "/etc/traefik/traefik.toml"
-    source = "/opt/services/traefik/traefik.toml"
-    type = "bind"
-    read_only = true
-  }
-
-  # Traefik file provider configuration dir
-  mounts {
-    target = "/etc/traefik/file.d"
-    source = "/opt/services/traefik/file.d"
+    target = "/etc/traefik/"
+    source = "/opt/services/traefik/"
     type = "bind"
     read_only = true
   }
@@ -85,16 +68,15 @@ resource "docker_container" "traefik" {
     protocol = "tcp"
   }
 
-  # socket.io
-  //  ports {
-  //    internal = "1337"
-  //    external = "1337"
-  //    protocol = "tcp"
-  //  }
+  # api
+//    ports {
+//      internal = "8080"
+//      external = "8080"
+//      protocol = "tcp"
+//    }
 
   networks_advanced {
     name = docker_network.traefik_net.name
-    //    ipv6_address = "2a01:4f8:221:3e41::2:a2"
   }
 
   restart = "unless-stopped"

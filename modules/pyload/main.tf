@@ -18,18 +18,8 @@ resource "docker_container" "pyload" {
   }
 
   labels {
-    label = "traefik.http.routers.pyload.entrypoints"
-    value = "websecure"
-  }
-
-  labels {
     label = "traefik.http.routers.pyload.tls"
     value = "true"
-  }
-
-  labels {
-    label = "traefik.http.routers.pyload.tls.certresolver"
-    value = "letsencrypt"
   }
 
   labels {

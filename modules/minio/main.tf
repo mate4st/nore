@@ -18,18 +18,8 @@ resource "docker_container" "minio" {
   }
 
   labels {
-    label = "traefik.http.routers.minio.entrypoints"
-    value = "websecure"
-  }
-
-  labels {
     label = "traefik.http.routers.minio.tls"
     value = "true"
-  }
-
-  labels {
-    label = "traefik.http.routers.minio.tls.certresolver"
-    value = "letsencrypt"
   }
 
   labels {
@@ -61,7 +51,6 @@ resource "docker_container" "minio" {
     "/data"
   ]
 
-  entrypoint = []
   networks_advanced {
     name = var.traefik_network
   }
